@@ -4,8 +4,7 @@ from django.db.models.deletion import CASCADE
 
 
 class User(AbstractUser):
-    # follows = models.ForeignKey("self",on_delete=CASCADE)
-    pass
+    follows = models.ManyToManyField('self', related_name='followers', symmetrical=False, null=True,blank=True)
 
 class Post(models.Model):
     creator = models.ForeignKey(User,on_delete=CASCADE)

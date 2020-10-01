@@ -4,11 +4,12 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 
-from .models import User
-
+from .models import User,Post
+from .queries import get_all_posts
 
 def index(request):
-    return render(request, "network/index.html")
+    posts = get_all_posts(Post)
+    return render(request, "network/index.html",{"posts" : posts})
 
 
 def login_view(request):

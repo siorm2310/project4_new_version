@@ -1,0 +1,1 @@
+document.getElementById("follow_btn").onclick()

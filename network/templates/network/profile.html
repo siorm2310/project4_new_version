@@ -1,0 +1,19 @@
+{% extends "network/layout.html" %}
+{% block script %}
+<script src="networks/js/profile.js"></script>
+{% endblock %}
+{% block body %}
+{% if user.is_authenticated %}
+{% if user.username != username %}
+<button class="btn btn-success" id="follow_btn" value="follow">Follow {{username}}!</button>
+{% endif %}
+{% endif %}
+    {% for post in posts %}
+    <div class="card">
+        <h3>{{post.title}}</h3>
+        <h5>{{post.creator}}</h5>
+        <p>{{post.content}}</p>
+        <p>likes : {{post.likes}}</p>
+    </div>
+    {% endfor %}
+{% endblock %}

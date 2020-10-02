@@ -5,11 +5,11 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from .models import User,Post
-from .queries import get_all_posts
+from .queries import get_all_posts,get_follows_posts,get_user_posts
 
 def index(request):
     posts = get_all_posts(Post)
-    return render(request, "network/index.html",{"posts" : posts})
+    return render(request, "network/index.html",{"posts" : posts,"user":request.user})
 
 
 def login_view(request):
@@ -62,3 +62,13 @@ def register(request):
         return HttpResponseRedirect(reverse("index"))
     else:
         return render(request, "network/register.html")
+
+
+def following_posts(request):
+    posts = get_follows_posts(request.user)
+    return render(request, "network/index.html",{"posts" : posts,"user":request.user})
+
+
+def profile(request,username):
+    posts = get_user_posts(username)
+    return render(request, "network/profile.html",{"posts" : posts,"user":request.user,"username":username})

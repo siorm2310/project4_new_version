@@ -1,11 +1,14 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect,JsonResponse
+from django.http import request
 from django.shortcuts import render
 from django.urls import reverse
+from django.views.decorators.csrf import csrf_exempt
 
+import json
 from .models import User,Post
-from .queries import get_all_posts,get_follows_posts,get_user_posts
+from .queries import *
 
 def index(request):
     posts = get_all_posts(Post)
@@ -72,3 +75,19 @@ def following_posts(request):
 def profile(request,username):
     posts = get_user_posts(username)
     return render(request, "network/profile.html",{"posts" : posts,"user":request.user,"username":username})
+
+def update_follows(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        
+        if data["follows"]:
+            follow_user(request.user,data["user"])
+            return JsonResponse({
+                "Status" : "success",
+                "operation" : "follow"
+            })
+        unfollow_user(request.user,data["user"])
+        return JsonResponse({
+                "Status" : "success",
+                "operation" : "un-follow"
+            })

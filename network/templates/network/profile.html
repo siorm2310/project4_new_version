@@ -1,11 +1,14 @@
 {% extends "network/layout.html" %}
+{% load static %}
+
 {% block script %}
-<script src="networks/js/profile.js"></script>
+<script defer src="{% static 'network/js/profile.js' %}"></script>
 {% endblock %}
+
 {% block body %}
 {% if user.is_authenticated %}
 {% if user.username != username %}
-<button class="btn btn-success" id="follow_btn" value="follow">Follow {{username}}!</button>
+    <button class="btn btn-success" id="follow_btn" value="{{username}}" data-follows="0">Follow {{username}}!</button>
 {% endif %}
 {% endif %}
     {% for post in posts %}

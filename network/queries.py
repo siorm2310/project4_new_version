@@ -20,3 +20,13 @@ def get_user_posts(username):
 
 def add_new_post():
     pass
+
+def follow_user(user,user_to_follow):
+    user_object = User.objects.get(username=user_to_follow)
+    user.follows.add(user_object)
+    user.save()
+
+def unfollow_user(user,user_to_follow):
+    user_object = User.objects.get(username=user_to_follow)
+    user.follows.remove(user_object)
+    user.save()

@@ -30,3 +30,6 @@ def unfollow_user(user,user_to_follow):
     user_object = User.objects.get(username=user_to_follow)
     user.follows.remove(user_object)
     user.save()
+
+def add_like(user,post):
+    pass

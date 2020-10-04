@@ -8,7 +8,7 @@
 {% block body %}
 {% if user.is_authenticated %}
 {% if user.username != username %}
-    <button class="btn btn-success" id="follow_btn" value="{{username}}" data-follows="0">Follow {{username}}!</button>
+    <button class="btn" id="follow_btn" value="{{username}}" data-follows="0" >Follow {{username}}!</button>
 {% endif %}
 {% endif %}
     {% for post in posts %}

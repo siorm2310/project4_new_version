@@ -16,6 +16,17 @@ function getCookie(name) {
 }
 const csrftoken = getCookie('csrftoken');
 
+function updateFollows(info) {
+    fetch('/update_follows',{
+        method : "POST",
+        headers: {
+            'X-CSRFToken': csrftoken,
+            'Content-Type': 'application/json'},
+        body: JSON.stringify(info)
+    })
+    .then(response => console.log(response))
+}
+
 document.addEventListener("DOMContentLoaded",()=>{
     let button = document.getElementById("follow_btn")
 
@@ -23,7 +34,7 @@ document.addEventListener("DOMContentLoaded",()=>{
         if (button.dataset.follows === "0") {
             button.dataset.follows = "1";
             button.className = "btn btn-danger";
-            button.innerHTML = "Unfollow!"
+            button.innerHTML = `Unfollow ${button.value}`
             const data = {
                 user : button.value,
                 follows : true
@@ -33,7 +44,7 @@ document.addEventListener("DOMContentLoaded",()=>{
         else if (button.dataset.follows === "1") {
             button.dataset.follows = "0";
             button.className = "btn btn-success";
-            button.innerHTML = "follow!"
+            button.innerHTML = `Unfollow ${button.value}`
             const data = {
                 user : button.value,
                 follows : false
@@ -42,15 +53,5 @@ document.addEventListener("DOMContentLoaded",()=>{
         }
     })
 
-    function updateFollows(info) {
-        fetch('/update_follows',{
-            method : "POST",
-            headers: {
-                'X-CSRFToken': csrftoken,
-                'Content-Type': 'application/json'},
-            body: JSON.stringify(info)
-        })
-        // .then(response => JSON.parse(response))
-        .then(response => console.log(response))
-    }
+
 })

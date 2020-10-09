@@ -1,18 +1,19 @@
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect,JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.http import request
 from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
 import json
-from .models import User,Post
+from .models import User, Post
 from .queries import *
+
 
 def index(request):
     posts = get_all_posts(Post)
-    return render(request, "network/index.html",{"posts" : posts,"user":request.user})
+    return render(request, "network/index.html", {"posts": posts, "user": request.user})
 
 
 def login_view(request):
@@ -69,25 +70,21 @@ def register(request):
 
 def following_posts(request):
     posts = get_follows_posts(request.user)
-    return render(request, "network/index.html",{"posts" : posts,"user":request.user})
+    return render(request, "network/index.html", {"posts": posts, "user": request.user})
 
 
-def profile(request,username):
+def profile(request, username):
     posts = get_user_posts(username)
-    return render(request, "network/profile.html",{"posts" : posts,"user":request.user,"username":username})
+    is_followed = is_user_followed(request.user, username)
 
-def update_follows(request):
     if request.method == "POST":
-        data = json.loads(request.body)
-        
-        if data["follows"]:
-            follow_user(request.user,data["user"])
-            return JsonResponse({
-                "Status" : "success",
-                "operation" : "follow"
-            })
-        unfollow_user(request.user,data["user"])
-        return JsonResponse({
-                "Status" : "success",
-                "operation" : "un-follow"
-            })
+        action = request.POST["follow_btn"]
+        if action == "follow":
+            follow_user(request.user, username)
+        else:
+            unfollow_user(request.user, username)
+        is_followed = not is_followed
+        return render(request, "network/profile.html",
+                      {"posts": posts, "user": request.user, "username": username, "is_followed": is_followed})
+    return render(request, "network/profile.html",
+                  {"posts": posts, "user": request.user, "username": username, "is_followed": is_followed})

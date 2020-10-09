@@ -13,8 +13,11 @@ class Post(models.Model):
     creator = models.ForeignKey(User,on_delete=CASCADE,related_name="creator")
     title = models.CharField(max_length=32)
     content = models.CharField(max_length=180)
-    likes = models.ManyToManyField(User, related_name="likes")
+    likes = models.ManyToManyField(User, related_name="likes",blank=True)
     time = models.DateTimeField(default=now())
 
+    def get_num_of_likes(self):
+        pass
+    
     def __str__(self):
         return self.title

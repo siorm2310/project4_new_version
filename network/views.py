@@ -88,3 +88,8 @@ def profile(request, username):
                       {"posts": posts, "user": request.user, "username": username, "is_followed": is_followed})
     return render(request, "network/profile.html",
                   {"posts": posts, "user": request.user, "username": username, "is_followed": is_followed})
+
+
+def likes_api(request, post_id):
+    if request.method == "GET":
+        return JsonResponse({"post": post_id, "liked": get_like_status(request.user, post_id)})

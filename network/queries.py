@@ -28,7 +28,10 @@ def add_new_post():
 
 
 def is_user_followed(user, user_to_follow):
-    user = get_object_or_404(User, username=user)
+    if user.id is None:
+        return False
+
+    user = User.objects.get(username=user)
 
     if user.follows.filter(username=user_to_follow).exists():
         return True
@@ -47,5 +50,7 @@ def unfollow_user(user, user_to_follow):
     user.save()
 
 
-def add_like(user, post):
-    pass
+def get_like_status(user, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    is_liked = post.likes.get(username=user).exists()
+    return is_liked

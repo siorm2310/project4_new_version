@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Load like buttons with data
     const buttons = document.getElementsByClassName("like_btn")
     for (const button of buttons) {
-        fetch(`likes/${button.value}`)
+        fetch(`../likes/${button.value}`)
             .then(res => res.json())
             .then(data => data["liked"])
             .then(status => {
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Interact with likes API when a like button is pressed
     document.querySelectorAll(".like_btn").forEach(btn => btn.addEventListener("click", () => {
         const status = btn.dataset.liked === "true" ? true : false
-        fetch(`/likes/${btn.value}`, {
+        fetch(`../likes/${btn.value}`, {
             method: 'POST',
             body: JSON.stringify({
                 liked: !status

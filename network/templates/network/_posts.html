@@ -5,8 +5,6 @@
     <h6>Posted on : {{post.time}}</h6>
     <p>{{post.content}}</p>
     <p>likes : <span id="{{post.id}}-num-likes">{{post.get_num_of_likes}}</span></p>
-    {% if user.username != username %}
     <button class="btn like_btn" value="{{post.id}}" data-liked=""></button>
-    {% endif %}
 </div>
 {% endfor %}

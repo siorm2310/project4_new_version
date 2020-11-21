@@ -52,5 +52,17 @@ def unfollow_user(user, user_to_follow):
 
 def get_like_status(user, post_id):
     post = get_object_or_404(Post, id=post_id)
-    is_liked = post.likes.get(username=user).exists()
+    is_liked = post.likes.filter(username=user).exists()
     return is_liked
+
+
+def add_like(username, post_id):
+    post = Post.objects.get(id=post_id)
+    user = User.objects.get(username=username)
+    post.likes.add(user)
+
+
+def remove_like(username, post_id):
+    post = Post.objects.get(id=post_id)
+    user = User.objects.get(username=username)
+    post.likes.remove(user)

@@ -27,11 +27,11 @@ document.addEventListener("DOMContentLoaded", () => {
         fetch(`/likes/${btn.value}`, {
             method: 'POST',
             body: JSON.stringify({
-                liked: btn.dataset.liked === "true" ? true : false
+                liked: !status
             })
         })
             .then(response => response.json())
             .then(result => console.log(result))
-            .then(() => changeLikeButton(btn.dataset.like, btn))
+            .then(() => changeLikeButton(!status, btn))
     }))
 })

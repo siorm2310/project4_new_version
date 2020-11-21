@@ -12,6 +12,7 @@ function changeLikeButton(status, button) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+    // Load like buttons with data
     const buttons = document.getElementsByClassName("like_btn")
     for (const button of buttons) {
         fetch(`likes/${button.value}`)
@@ -21,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 changeLikeButton(status, button)
             })
     }
-
+    // Interact with likes API when a like button is pressed
     document.querySelectorAll(".like_btn").forEach(btn => btn.addEventListener("click", () => {
         const status = btn.dataset.liked === "true" ? true : false
         fetch(`/likes/${btn.value}`, {
@@ -31,7 +32,12 @@ document.addEventListener("DOMContentLoaded", () => {
             })
         })
             .then(response => response.json())
-            .then(result => console.log(result))
-            .then(() => changeLikeButton(!status, btn))
+            // .then(result => console.log(result)) // For double checking data
+            .then((data) => {
+                changeLikeButton(!status, btn)
+                likeId = btn.value;
+                document.getElementById(`${likeId}-num-likes`).innerHTML = data['current_num_likes']
+            }
+            )
     }))
 })

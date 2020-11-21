@@ -93,12 +93,15 @@ def profile(request, username):
 @csrf_exempt
 def likes_api(request, post_id):
     if request.method == "GET":
-        return JsonResponse({"post_id": post_id, "liked": get_like_status(request.user, post_id)})
+        like_status = get_like_status(request.user, post_id)
+        return JsonResponse({"post_id": post_id, "liked": like_status[0], "current_num_likes": like_status[1]})
 
     if request.method == "POST":
         payload = json.loads(request.body)
         if payload["liked"]:
             add_like(request.user, post_id)
-            return JsonResponse({"post_id": post_id, "like_change": "success", "liked": True})
+            like_status = get_like_status(request.user, post_id)
+            return JsonResponse({"post_id": post_id, "like_change": "success", "liked": True, "liked": like_status[0], "current_num_likes": like_status[1]})
         remove_like(request.user, post_id)
-        return JsonResponse({"post_id": post_id, "like_change": "success", "liked": False})
+        like_status = get_like_status(request.user, post_id)
+        return JsonResponse({"post_id": post_id, "like_change": "success", "liked": False, "liked": like_status[0], "current_num_likes": like_status[1]})

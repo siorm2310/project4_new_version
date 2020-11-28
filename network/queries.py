@@ -13,8 +13,8 @@ def get_follows_posts(user):
         return None
 
 
-def get_all_posts(User):
-    return User.objects.all()
+def get_all_posts():
+    return Post.objects.all().order_by('-time')
 
 
 def get_user_posts(username):

@@ -13,6 +13,12 @@ from .queries import *
 
 def index(request):
     posts = get_all_posts(Post)
+    if request.method == "POST": # Submitted new post
+        user = request.user
+        title = request.POST["title"]
+        content = request.POST["content"]
+        add_new_post(user,title,content)
+        return render(request, "network/index.html", {"posts": posts, "user": request.user})
     return render(request, "network/index.html", {"posts": posts, "user": request.user})
 
 

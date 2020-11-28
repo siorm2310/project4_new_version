@@ -23,8 +23,10 @@ def get_user_posts(username):
     return posts
 
 
-def add_new_post():
-    pass
+def add_new_post(creator,title,content):
+    new_post = Post(creator=creator,title=title,content=content)
+    new_post.save()
+    return
 
 
 def is_user_followed(user, user_to_follow):

@@ -3,11 +3,13 @@ from django.shortcuts import get_list_or_404, get_object_or_404
 
 
 def get_follows_posts(user):
-    posts = []
+    posts = Post.objects.none() # union of all querysets
     try:
         follows = user.follows.all()
         for followee in follows:
-            posts.append(Post.objects.get(creator=followee))
+            followee_posts = Post.objects.filter(creator=followee)
+            posts = posts.union(followee_posts)
+        posts.order_by("-time")
         return posts
     except:
         return None

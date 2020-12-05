@@ -1,23 +1,29 @@
+import json
+
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
-from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-from django.http import request
-from django.shortcuts import render
+from django.http import (HttpResponse, HttpResponseRedirect, JsonResponse,
+                         request)
+from django.shortcuts import render,redirect
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
 
-import json
-from .models import User, Post
+from .models import Post, User
 from .queries import *
 
 
 def index(request):
     posts = get_all_posts()
-    if request.method == "POST": # Submitted new post
+    if request.method == "POST":
         user = request.user
-        title = request.POST["title"]
-        content = request.POST["content"]
-        add_new_post(user,title,content)
+
+        if 'addPost' in request.POST:
+            title = request.POST["title"]
+            content = request.POST["content"]
+            if title is not None and content is not None:
+                add_new_post(user,title,content)
+        
+         
         return render(request, "network/index.html", {"posts": posts, "user": request.user})
     return render(request, "network/index.html", {"posts": posts, "user": request.user})
 
@@ -111,3 +117,14 @@ def likes_api(request, post_id):
         remove_like(request.user, post_id)
         like_status = get_like_status(request.user, post_id)
         return JsonResponse({"post_id": post_id, "like_change": "success", "liked": False, "liked": like_status[0], "current_num_likes": like_status[1]})
+
+@csrf_exempt
+def edit_api(request,post_id):
+    user = request.user
+    if request.method == "POST":
+        if 'editPost' in request.POST:
+            title = request.POST["edit_title"]
+            content = request.POST["edit_content"]
+            if title is not None and content is not None:
+                edit_post(post_id,user,title,content)
+                return redirect('profile',user.username)

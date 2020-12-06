@@ -7,13 +7,16 @@ from django.http import (HttpResponse, HttpResponseRedirect, JsonResponse,
 from django.shortcuts import render,redirect
 from django.urls import reverse
 from django.views.decorators.csrf import csrf_exempt
-
+from django.core.paginator import Paginator
 from .models import Post, User
 from .queries import *
 
 
 def index(request):
     posts = get_all_posts()
+    paginator = Paginator(posts, 10)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
     if request.method == "POST":
         user = request.user
 
@@ -24,8 +27,8 @@ def index(request):
                 add_new_post(user,title,content)
         
          
-        return render(request, "network/index.html", {"posts": posts, "user": request.user})
-    return render(request, "network/index.html", {"posts": posts, "user": request.user})
+        return render(request, "network/index.html", {"posts": posts, "user": request.user, 'page_obj': page_obj})
+    return render(request, "network/index.html", {"posts": posts, "user": request.user, 'page_obj': page_obj})
 
 
 def login_view(request):

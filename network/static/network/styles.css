@@ -1,0 +1,19 @@
+body{
+    background-color: lightsteelblue;
+}
+
+.card{
+    background-color: #cacaca;
+    margin: 15px;
+}
+
+.card-holder{
+    width: 55%;
+}
+
+.form-holder{
+    background-color: floralwhite;
+    width: 55%;
+    justify-content: center;
+    margin-top: 15px;
+}
